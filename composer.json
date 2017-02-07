@@ -1,0 +1,44 @@
+{
+    "name": "superhelio/commands",
+    "description": "Laravel Commands",
+    "keywords": [
+        "laravel",
+        "superhelio",
+        "commands"
+    ],
+    "homepage": "https://github.com/superhelio/commands",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "SuperHelio",
+            "email": "hello@superhelio.com",
+            "homepage": "https://superhelio.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php" : ">=5.5.0",
+        "illuminate/support": "~5.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit" : "4.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Superhelio\\Commands\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Superhelio\\Commands\\Test\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
