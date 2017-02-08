@@ -32,7 +32,7 @@ class Gozer extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return bool
      */
     public function handle()
     {
@@ -52,7 +52,7 @@ class Gozer extends Command
  \______  /\____/_____ \\___  >__|   
         \/            \/    \/       
 
-        ');
+');
 
         $tables = [];
 
@@ -70,7 +70,7 @@ class Gozer extends Command
             try {
                 /** @var \Doctrine\DBAL\Schema\AbstractSchemaManager $connection */
                 $connection = app('db')->connection()->getDoctrineSchemaManager();
-            } catch (\Doctrine\DBAL\Driver\PDOException $e) {
+            } catch (\Exception $e) {
                 $this->error($e->getMessage());
 
                 return false;
@@ -108,28 +108,33 @@ class Gozer extends Command
              * Bid your farewells to these tables.
              * Last look and confirmation.
              */
-
             $this->info(sprintf(
                 "Tables found:\n - %s",
                 implode(",\n - ", $tables->toArray())
             ));
             $this->line('');
 
+            /**
+             * Last confirmation before dropping tables
+             */
             if ($this->confirm('Really delete those tables?')) {
-                /**
-                 * Fancy pants progress bar to see your tables get destroyed
-                 */
+
+                /** Fancy pants progress bar to see your tables get destroyed */
                 $bar = $this->output->createProgressBar($tables->count());
 
                 \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
                 $tables->each(function ($table) use ($bar, $connection) {
 
+                    /** Drop the table */
                     $connection->dropTable($table);
 
+                    /** Advance our progress bar */
                     $bar->advance();
+
                 });
                 \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
 
+                /** Progress bar is now finished */
                 $bar->finish();
             }
 
