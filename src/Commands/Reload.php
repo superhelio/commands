@@ -18,7 +18,7 @@ class Reload extends Command
      *
      * @var string
      */
-    protected $description = 'Delete database tables, migrate and run seeds';
+    protected $description = 'Rollback migrations, migrate and run seeds';
 
     /**
      * Create a new command instance.
