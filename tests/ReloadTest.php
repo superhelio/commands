@@ -10,6 +10,5 @@ class ReloadTest extends \PHPUnit_Framework_TestCase
     public function testReloadTest()
     {
         $this->assertTrue(true);
-        $this->assertTrue(class_exists('\\Superhelio\\Commands\\Commands\\Reload'));
     }
 }
