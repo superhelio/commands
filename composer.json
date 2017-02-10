@@ -31,7 +31,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Superhelio\\Commands\\Test\\": "tests"
+            "Superhelio\\Commands\\Test\\": "tests",
+            "Orchestra\\Testbench\\": "vendor/orchestra/testbench"
         }
     },
     "scripts": {
