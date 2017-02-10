@@ -46,8 +46,8 @@ class GozerTest extends \Orchestra\Testbench\TestCase
     protected function getPackageProviders($app)
     {
         return [
-            \Superhelio\Commands\Tests\Stubs\ServiceProvider::class,
-            \Superhelio\Commands\ServiceProvider::class
+            '\Superhelio\Commands\Tests\Stubs\ServiceProvider',
+            '\Superhelio\Commands\ServiceProvider'
         ];
     }
 
