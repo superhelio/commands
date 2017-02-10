@@ -12,6 +12,10 @@ env:
     - setup=basic
     - coverage=no
 
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
 before_script:
   - composer config discard-changes true
   - if [[ $setup = 'basic' ]]; then travis_retry composer install --prefer-dist --no-interaction; fi
