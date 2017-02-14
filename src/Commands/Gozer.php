@@ -4,6 +4,7 @@ namespace Superhelio\Commands\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class Gozer extends Command
 {
@@ -20,6 +21,11 @@ class Gozer extends Command
      * @var string
      */
     protected $description = 'Force delete database tables that has your table prefix';
+
+    /**
+     * @var string Database table prefix
+     */
+    private $dbPrefix = '';
 
     /**
      * Create a new command instance.
@@ -56,34 +62,20 @@ class Gozer extends Command
 
         $tables = [];
 
-        $dbPrefix = trim(DB::getTablePrefix());
+        $this->dbPrefix = $this->getDatabasePrefix();
 
         $confirmationQuestion = 'Delete all of your database tables?';
-        if (!empty($dbPrefix)) {
+        if (!empty($this->dbPrefix)) {
             $confirmationQuestion = sprintf(
                 'Delete your tables that begin with %s*',
-                $dbPrefix
+                $this->dbPrefix
             );
         }
 
         if ($this->confirm($confirmationQuestion)) {
-            try {
-                /** @var \Doctrine\DBAL\Schema\AbstractSchemaManager $connection */
-                $connection = app('db')->connection()->getDoctrineSchemaManager();
-            } catch (\Exception $e) {
-                $this->error($e->getMessage());
 
-                return false;
-            }
-
-            try {
-                /** @var array $tables */
-                $tables = $connection->listTableNames();
-            } catch (\Exception $e) {
-                $this->error($e->getMessage());
-
-                return false;
-            }
+            $connection = $this->getConnection();
+            $tables = $this->getTables($connection);
 
             /**
              * Reject tables that do not have specified table prefix.
@@ -92,9 +84,7 @@ class Gozer extends Command
              *
              * @var \Illuminate\Support\Collection $tables
              */
-            $tables = collect($tables)->reject(function ($table) use ($dbPrefix) {
-                return !starts_with($table, $dbPrefix);
-            });
+            $tables = $this->getFilteredTables($tables);
 
             /**
              * Check that we got at least one table, bail out if not
@@ -122,7 +112,7 @@ class Gozer extends Command
                 /** Fancy pants progress bar to see your tables get destroyed */
                 $bar = $this->output->createProgressBar($tables->count());
 
-                \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
+                Schema::disableForeignKeyConstraints();
                 $tables->each(function ($table) use ($bar, $connection) {
 
                     /** Drop the table */
@@ -132,7 +122,7 @@ class Gozer extends Command
                     $bar->advance();
 
                 });
-                \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
+                Schema::enableForeignKeyConstraints();
 
                 /** Progress bar is now finished */
                 $bar->finish();
@@ -146,5 +136,60 @@ class Gozer extends Command
         $this->info('Done.');
 
         return true;
+    }
+
+    /**
+     * @return bool|\Doctrine\DBAL\Schema\AbstractSchemaManager
+     */
+    private function getConnection()
+    {
+        try {
+            /** @var \Doctrine\DBAL\Schema\AbstractSchemaManager $connection */
+            $connection = app('db')->connection()->getDoctrineSchemaManager();
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+
+            return false;
+        }
+
+        return $connection;
+    }
+
+    /**
+     * @param \Doctrine\DBAL\Schema\AbstractSchemaManager $connection
+     *
+     * @return array|bool
+     */
+    private function getTables(\Doctrine\DBAL\Schema\AbstractSchemaManager $connection)
+    {
+        try {
+            /** @var array $tables */
+            $tables = $connection->listTableNames();
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+
+            return false;
+        }
+
+        return $tables;
+    }
+
+    private function getDatabasePrefix()
+    {
+        return trim(DB::getTablePrefix());
+    }
+
+    /**
+     * @param array $tables
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    private function getFilteredTables($tables = [])
+    {
+        $prefix = $this->dbPrefix;
+
+        return collect($tables)->reject(function ($table) use ($prefix) {
+            return !starts_with($table, $prefix);
+        });
     }
 }
