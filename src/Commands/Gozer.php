@@ -73,7 +73,6 @@ class Gozer extends Command
         }
 
         if ($this->confirm($confirmationQuestion)) {
-
             $connection = $this->getConnection();
             $tables = $this->getTables($connection);
 
@@ -130,7 +129,6 @@ class Gozer extends Command
 
             $this->line('');
             $this->line('');
-
         }
 
         $this->info('Done.');
