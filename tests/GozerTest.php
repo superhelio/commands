@@ -3,8 +3,6 @@ namespace Superhelio\Commands;
 
 use ReflectionClass;
 use Superhelio\Commands\Commands\Gozer;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
@@ -84,6 +82,50 @@ class GozerTest extends \Orchestra\Testbench\TestCase
     {
         $gozer = new ReflectionClass('\\Superhelio\\Commands\\Commands\\Gozer');
         $this->assertTrue($gozer->hasMethod('handle'));
+        $this->assertTrue($gozer->hasProperty('signature'));
+        $this->assertTrue($gozer->hasProperty('description'));
         $this->assertTrue($gozer->hasProperty('dbPrefix'));
+    }
+
+    public function test_gozer_finds_database_prefix()
+    {
+        $gozer = new Gozer();
+
+        $this->assertEquals('gozerTest__', $gozer->getDatabasePrefix());
+    }
+
+    public function test_gozer_finds_users_table()
+    {
+        $gozer = new Gozer();
+
+        $connection = $gozer->getConnection();
+
+        $tables = $gozer->getTables($connection);
+        $this->assertTrue(in_array('gozerTest__users', $tables, false));
+
+        $gozer->setDatabasePrefix('gozerTest__');
+        $filteredTables = $gozer->getFilteredTables($tables);
+        $this->assertTrue(is_a($filteredTables, \Illuminate\Support\Collection::class));
+        $this->assertTrue(in_array('gozerTest__users', $filteredTables->toArray(), false));
+    }
+
+    public function test_gozer_table_filtering_works()
+    {
+        $gozer = new Gozer();
+        $tables = array(
+            'gozerTest__users',
+            'gozerTest__migrations',
+            'this_should_be_filtered',
+            'filter_me_too'
+        );
+
+        $gozer->setDatabasePrefix('gozerTest__');
+        $filtered = $gozer->getFilteredTables($tables);
+        $array = $filtered->toArray();
+
+        $this->assertFalse(in_array('this_should_be_filtered', $array, false));
+        $this->assertFalse(in_array('filter_me_too', $array, false));
+        $this->assertTrue(in_array('gozerTest__users', $array, false));
+        $this->assertTrue(in_array('gozerTest__migrations', $array, false));
     }
 }

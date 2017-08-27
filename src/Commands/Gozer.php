@@ -60,9 +60,7 @@ class Gozer extends Command
 
 ');
 
-        $tables = [];
-
-        $this->dbPrefix = $this->getDatabasePrefix();
+        $this->setDatabasePrefix($this->getDatabasePrefix());
 
         $confirmationQuestion = 'Delete all of your database tables?';
         if (!empty($this->dbPrefix)) {
@@ -139,7 +137,7 @@ class Gozer extends Command
     /**
      * @return bool|\Doctrine\DBAL\Schema\AbstractSchemaManager
      */
-    private function getConnection()
+    public function getConnection()
     {
         try {
             /** @var \Doctrine\DBAL\Schema\AbstractSchemaManager $connection */
@@ -158,7 +156,7 @@ class Gozer extends Command
      *
      * @return array|bool
      */
-    private function getTables(\Doctrine\DBAL\Schema\AbstractSchemaManager $connection)
+    public function getTables(\Doctrine\DBAL\Schema\AbstractSchemaManager $connection)
     {
         try {
             /** @var array $tables */
@@ -172,9 +170,19 @@ class Gozer extends Command
         return $tables;
     }
 
-    private function getDatabasePrefix()
+    public function getDatabasePrefix()
     {
         return trim(DB::getTablePrefix());
+    }
+
+    /**
+     * This is mainly for testing purposes
+     *
+     * @param string $prefix
+     */
+    public function setDatabasePrefix($prefix = '')
+    {
+        $this->dbPrefix = $prefix;
     }
 
     /**
@@ -182,7 +190,7 @@ class Gozer extends Command
      *
      * @return \Illuminate\Support\Collection
      */
-    private function getFilteredTables($tables = [])
+    public function getFilteredTables($tables = [])
     {
         $prefix = $this->dbPrefix;
 
