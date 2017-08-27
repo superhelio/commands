@@ -20,20 +20,12 @@ class Gozer extends Command
      *
      * @var string
      */
-    protected $description = 'Force delete database tables that has your table prefix';
+    protected $description = 'Force delete database tables that have your table prefix';
 
     /**
      * @var string Database table prefix
      */
     private $dbPrefix = '';
-
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.
@@ -51,12 +43,12 @@ class Gozer extends Command
 
         $this->info('
 
-  ________                           
+  ________
  /  _____/  ____________ ___________ 
 /   \  ___ /  _ \___   // __ \_  __ \
 \    \_\  (  <_> )    /\  ___/|  | \/
- \______  /\____/_____ \\___  >__|   
-        \/            \/    \/       
+ \______  /\____/_____ \\___  >__|
+        \/            \/    \/
 
 ');
 
@@ -88,6 +80,7 @@ class Gozer extends Command
              */
             if ($tables->count() < 1) {
                 $this->info('There are no tables, only Zuul.');
+
                 return true;
             }
 

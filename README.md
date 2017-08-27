@@ -34,7 +34,7 @@ public function register()
 ## Usage
 
 - *superhelio:gozer*
-    - Force delete database tables that has your table prefix
+    - Force delete database tables that have your table prefix
     - `php artisan superhelio:gozer`
 - *superhelio:reload*
     - Reset database, migrate and seed

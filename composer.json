@@ -1,6 +1,6 @@
 {
     "name": "superhelio/commands",
-    "description": "Laravel Commands",
+    "description": "This is a collection of Laravel Artisan commands created to help everyone in their development work.",
     "keywords": [
         "laravel",
         "superhelio",

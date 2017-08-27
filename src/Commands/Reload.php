@@ -21,14 +21,6 @@ class Reload extends Command
     protected $description = 'Rollback migrations, migrate and run seeds';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
@@ -53,6 +45,8 @@ class Reload extends Command
                     '--verbose' => 3
                 ]
             );
+
+            return true;
         }
     }
 }
