@@ -33,6 +33,9 @@ public function register()
 
 ## Usage
 
+- *superhelio:gozer*
+    - Force delete database tables that has your table prefix
+    - `php artisan superhelio:gozer`
 - *superhelio:reload*
     - Reset database, migrate and seed
     - `php artisan superhelio:reload`
@@ -46,10 +49,6 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 ``` bash
 $ composer test
 ```
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Security
 
@@ -77,4 +76,4 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [link-code-quality]: https://scrutinizer-ci.com/g/superhelio/commands
 [link-downloads]: https://packagist.org/packages/superhelio/commands
 [link-author]: https://github.com/superhelio
-[link-contributors]: ../../contributors
+[link-contributors]: https://github.com/superhelio/commands/graphs/contributors
