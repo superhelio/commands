@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.1.2](https://github.com/superhelio/commands/tree/1.1.2) (2017-09-15)
+- Removed composer.lock, only to enable correct CI builds
+- Reworked travis-ci.org configuration, builds should now go green
+
 ## [1.1.1](https://github.com/superhelio/commands/tree/1.1.1) (2017-08-27)
 - Typo fixes
 - Removal of dead/unnecessary code
