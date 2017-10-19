@@ -10,6 +10,8 @@
 This is a collection of Laravel Artisan commands created to help everyone
 in their development work. We try to keep these as useful as possible.
 
+This package requires PHP 7.0 or later. `composer.lock` has been generated with PHP v7.0.23.
+
 ## Install
 
 ### Step 1: Install Through Composer
@@ -77,3 +79,4 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [link-downloads]: https://packagist.org/packages/superhelio/commands
 [link-author]: https://github.com/superhelio
 [link-contributors]: https://github.com/superhelio/commands/graphs/contributors
+[link-dbal]: https://packagist.org/packages/doctrine/dbal
