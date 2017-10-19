@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.2.0](https://github.com/superhelio/commands/tree/1.2.0) (2017-10-19)
+- Bumped PHP version requirement to >=7.0, PHP5.6 was taking really long time to resolve
+- Included composer.lock, which is generated with PHP v7.0.23
+
 ## [1.1.2](https://github.com/superhelio/commands/tree/1.1.2) (2017-09-15)
 - Removed composer.lock, only to enable correct CI builds
 - Reworked travis-ci.org configuration, builds should now go green
