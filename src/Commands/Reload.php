@@ -11,7 +11,9 @@ class Reload extends Command
      *
      * @var string
      */
-    protected $signature = 'superhelio:reload';
+    protected $signature = 'superhelio:reload
+        {--automate=false : Should run without questions?}
+        {--loud=true : Should output reset and migrate outputs?}';
 
     /**
      * The console command description.
@@ -27,26 +29,51 @@ class Reload extends Command
      */
     public function handle()
     {
-        if ($this->confirm('Rollback all your database tables, recreate them and seed?')) {
-            $this->call(
-                'migrate:reset',
-                [
-                    '--no-interaction' => true,
-                    '--env' => 'development',
-                    '--verbose' => 3
-                ]
-            );
-            $this->call(
-                'migrate',
-                [
-                    '--seed' => true,
-                    '--no-interaction' => true,
-                    '--env' => 'development',
-                    '--verbose' => 3
-                ]
-            );
+        $automated = $this->automate();
 
-            return true;
+        if ($automated && $this->confirm('Rollback all your database tables, recreate them and seed?')) {
+            return $this->runReload();
         }
+        if (!$automated) {
+            return $this->runReload();
+        }
+    }
+
+    public function automate()
+    {
+        $automate = $this->option('automate');
+
+        return !($automate === '1' || $automate === 1 || $automate === 'yes' || $automate === 'true');
+    }
+
+    public function outputVerbosity()
+    {
+        $output = $this->option('loud');
+
+        return ($output === '1' || $output === 1 || $output == 'yes' || $output == 'true');
+    }
+
+    public function runReload()
+    {
+        $verbose = ($this->outputVerbosity() ? 3 : 0);
+        $this->call(
+            'migrate:reset',
+            [
+                '--no-interaction' => true,
+                '--env' => 'development',
+                '--verbose' => $verbose
+            ]
+        );
+        $this->call(
+            'migrate',
+            [
+                '--seed' => true,
+                '--no-interaction' => true,
+                '--env' => 'development',
+                '--verbose' => $verbose
+            ]
+        );
+
+        return true;
     }
 }
