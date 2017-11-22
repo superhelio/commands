@@ -1,4 +1,5 @@
 <?php
+
 namespace Superhelio\Commands;
 
 use ReflectionClass;
@@ -101,12 +102,12 @@ class GozerTest extends \Orchestra\Testbench\TestCase
         $connection = $gozer->getConnection();
 
         $tables = $gozer->getTables($connection);
-        $this->assertTrue(in_array('gozerTest__users', $tables, false));
+        $this->assertTrue(\in_array('gozerTest__users', $tables, false));
 
         $gozer->setDatabasePrefix('gozerTest__');
         $filteredTables = $gozer->getFilteredTables($tables);
         $this->assertTrue(is_a($filteredTables, \Illuminate\Support\Collection::class));
-        $this->assertTrue(in_array('gozerTest__users', $filteredTables->toArray(), false));
+        $this->assertTrue(\in_array('gozerTest__users', $filteredTables->toArray(), false));
     }
 
     public function test_gozer_table_filtering_works()
@@ -123,9 +124,9 @@ class GozerTest extends \Orchestra\Testbench\TestCase
         $filtered = $gozer->getFilteredTables($tables);
         $array = $filtered->toArray();
 
-        $this->assertFalse(in_array('this_should_be_filtered', $array, false));
-        $this->assertFalse(in_array('filter_me_too', $array, false));
-        $this->assertTrue(in_array('gozerTest__users', $array, false));
-        $this->assertTrue(in_array('gozerTest__migrations', $array, false));
+        $this->assertFalse(\in_array('this_should_be_filtered', $array, false));
+        $this->assertFalse(\in_array('filter_me_too', $array, false));
+        $this->assertTrue(\in_array('gozerTest__users', $array, false));
+        $this->assertTrue(\in_array('gozerTest__migrations', $array, false));
     }
 }
