@@ -1,5 +1,5 @@
 <?php
-namespace Superhelio\Commands;
+namespace Superhelio\Commands\Tests;
 
 use ReflectionClass;
 use Superhelio\Commands\Commands\Gozer;
@@ -11,7 +11,7 @@ class GozerTest extends \Orchestra\Testbench\TestCase
     /**
      * Setup the test environment.
      */
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
         $this->artisan('migrate', ['--database' => 'testbench']);
@@ -49,8 +49,8 @@ class GozerTest extends \Orchestra\Testbench\TestCase
     protected function getPackageProviders($app)
     {
         return [
-            '\Superhelio\Commands\Tests\Stubs\ServiceProvider',
-            '\Superhelio\Commands\ServiceProvider'
+            \Superhelio\Commands\Tests\Stubs\ServiceProvider::class,
+            \Superhelio\Commands\ServiceProvider::class
         ];
     }
 
@@ -63,35 +63,35 @@ class GozerTest extends \Orchestra\Testbench\TestCase
         ]);
 
         $users = DB::table('users')->where('id', '=', 1)->first();
-        $this->assertEquals('hello@gozer.dev', $users->email);
-        $this->assertEquals('User name', $users->name);
-        $this->assertTrue(Hash::check('123', $users->password));
+        self::assertEquals('hello@gozer.dev', $users->email);
+        self::assertEquals('User name', $users->name);
+        self::assertTrue(Hash::check('123', $users->password));
     }
 
     public function test_dbal_is_installed()
     {
-        $this->assertTrue(class_exists('\\Doctrine\\DBAL\\Schema\\Schema'));
+        self::assertTrue(class_exists('\\Doctrine\\DBAL\\Schema\\Schema'));
     }
 
     public function test_gozer_is_installed()
     {
-        $this->assertTrue(class_exists('\\Superhelio\\Commands\\Commands\\Gozer'));
+        self::assertTrue(class_exists('\\Superhelio\\Commands\\Commands\\Gozer'));
     }
 
     public function test_gozer_has_required_methods_and_properties()
     {
         $gozer = new ReflectionClass('\\Superhelio\\Commands\\Commands\\Gozer');
-        $this->assertTrue($gozer->hasMethod('handle'));
-        $this->assertTrue($gozer->hasProperty('signature'));
-        $this->assertTrue($gozer->hasProperty('description'));
-        $this->assertTrue($gozer->hasProperty('dbPrefix'));
+        self::assertTrue($gozer->hasMethod('handle'));
+        self::assertTrue($gozer->hasProperty('signature'));
+        self::assertTrue($gozer->hasProperty('description'));
+        self::assertTrue($gozer->hasProperty('dbPrefix'));
     }
 
     public function test_gozer_finds_database_prefix()
     {
         $gozer = new Gozer();
 
-        $this->assertEquals('gozerTest__', $gozer->getDatabasePrefix());
+        self::assertEquals('gozerTest__', $gozer->getDatabasePrefix());
     }
 
     public function test_gozer_finds_users_table()
@@ -101,12 +101,12 @@ class GozerTest extends \Orchestra\Testbench\TestCase
         $connection = $gozer->getConnection();
 
         $tables = $gozer->getTables($connection);
-        $this->assertTrue(in_array('gozerTest__users', $tables, false));
+        self::assertContains( 'gozerTest__users', $tables );
 
         $gozer->setDatabasePrefix('gozerTest__');
         $filteredTables = $gozer->getFilteredTables($tables);
-        $this->assertTrue(is_a($filteredTables, \Illuminate\Support\Collection::class));
-        $this->assertTrue(in_array('gozerTest__users', $filteredTables->toArray(), false));
+        self::assertTrue(is_a($filteredTables, \Illuminate\Support\Collection::class));
+        self::assertContains( 'gozerTest__users', $filteredTables->toArray() );
     }
 
     public function test_gozer_table_filtering_works()
@@ -123,9 +123,9 @@ class GozerTest extends \Orchestra\Testbench\TestCase
         $filtered = $gozer->getFilteredTables($tables);
         $array = $filtered->toArray();
 
-        $this->assertFalse(in_array('this_should_be_filtered', $array, false));
-        $this->assertFalse(in_array('filter_me_too', $array, false));
-        $this->assertTrue(in_array('gozerTest__users', $array, false));
-        $this->assertTrue(in_array('gozerTest__migrations', $array, false));
+        self::assertNotContains( 'this_should_be_filtered', $array );
+        self::assertNotContains( 'filter_me_too', $array );
+        self::assertContains( 'gozerTest__users', $array );
+        self::assertContains( 'gozerTest__migrations', $array );
     }
 }

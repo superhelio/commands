@@ -5,6 +5,7 @@ namespace Superhelio\Commands\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class Gozer extends Command
 {
@@ -165,7 +166,7 @@ class Gozer extends Command
 
     public function getDatabasePrefix()
     {
-        return trim(DB::getTablePrefix());
+        return trim(DB::connection()->getTablePrefix());
     }
 
     /**
@@ -188,7 +189,7 @@ class Gozer extends Command
         $prefix = $this->dbPrefix;
 
         return collect($tables)->reject(function ($table) use ($prefix) {
-            return !starts_with($table, $prefix);
+            return !Str::startsWith($table, $prefix);
         });
     }
 }
