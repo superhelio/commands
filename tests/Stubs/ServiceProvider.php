@@ -1,4 +1,5 @@
 <?php
+
 namespace Superhelio\Commands\Tests\Stubs;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider

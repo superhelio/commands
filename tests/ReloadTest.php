@@ -1,4 +1,5 @@
 <?php
+
 namespace Superhelio\Commands\Tests;
 
 use Superhelio\Commands\Commands\Reload;

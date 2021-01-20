@@ -1,4 +1,5 @@
 <?php
+
 namespace Superhelio\Commands\Tests;
 
 use ReflectionClass;
@@ -11,7 +12,7 @@ class GozerTest extends \Orchestra\Testbench\TestCase
     /**
      * Setup the test environment.
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
         $this->artisan('migrate', ['--database' => 'testbench']);
@@ -20,7 +21,7 @@ class GozerTest extends \Orchestra\Testbench\TestCase
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application $app
+     * @param \Illuminate\Foundation\Application $app
      *
      * @return void
      */
@@ -42,7 +43,7 @@ class GozerTest extends \Orchestra\Testbench\TestCase
      * In a normal app environment these would be added to
      * the 'providers' array in the config/app.php file.
      *
-     * @param  \Illuminate\Foundation\Application $app
+     * @param \Illuminate\Foundation\Application $app
      *
      * @return array
      */
@@ -101,12 +102,12 @@ class GozerTest extends \Orchestra\Testbench\TestCase
         $connection = $gozer->getConnection();
 
         $tables = $gozer->getTables($connection);
-        self::assertContains( 'gozerTest__users', $tables );
+        self::assertContains('gozerTest__users', $tables);
 
         $gozer->setDatabasePrefix('gozerTest__');
         $filteredTables = $gozer->getFilteredTables($tables);
         self::assertTrue(is_a($filteredTables, \Illuminate\Support\Collection::class));
-        self::assertContains( 'gozerTest__users', $filteredTables->toArray() );
+        self::assertContains('gozerTest__users', $filteredTables->toArray());
     }
 
     public function test_gozer_table_filtering_works()
@@ -123,9 +124,9 @@ class GozerTest extends \Orchestra\Testbench\TestCase
         $filtered = $gozer->getFilteredTables($tables);
         $array = $filtered->toArray();
 
-        self::assertNotContains( 'this_should_be_filtered', $array );
-        self::assertNotContains( 'filter_me_too', $array );
-        self::assertContains( 'gozerTest__users', $array );
-        self::assertContains( 'gozerTest__migrations', $array );
+        self::assertNotContains('this_should_be_filtered', $array);
+        self::assertNotContains('filter_me_too', $array);
+        self::assertContains('gozerTest__users', $array);
+        self::assertContains('gozerTest__migrations', $array);
     }
 }

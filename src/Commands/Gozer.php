@@ -135,14 +135,12 @@ class Gozer extends Command
     {
         try {
             /** @var \Doctrine\DBAL\Schema\AbstractSchemaManager $connection */
-            $connection = app('db')->connection()->getDoctrineSchemaManager();
+            return app('db')->connection()->getDoctrineSchemaManager();
         } catch (\Exception $e) {
             $this->error($e->getMessage());
 
             return false;
         }
-
-        return $connection;
     }
 
     /**
@@ -180,7 +178,7 @@ class Gozer extends Command
     }
 
     /**
-     * @param array $tables
+     * @param array|\Illuminate\Support\Collection $tables
      *
      * @return \Illuminate\Support\Collection
      */
