@@ -36,7 +36,7 @@ class ServiceProvider extends BaseServiceProvider
     private function registerReloader()
     {
         $this->app->singleton('command.superhelio.reload', function ($app) {
-            return $app['Superhelio\Commands\Commands\Reload'];
+            return $app[\Superhelio\Commands\Commands\Reload::class];
         });
         $this->commands('command.superhelio.reload');
     }
@@ -44,7 +44,7 @@ class ServiceProvider extends BaseServiceProvider
     private function registerGozer()
     {
         $this->app->singleton('command.superhelio.gozer', function ($app) {
-            return $app['Superhelio\Commands\Commands\Gozer'];
+            return $app[\Superhelio\Commands\Commands\Gozer::class];
         });
         $this->commands('command.superhelio.gozer');
     }

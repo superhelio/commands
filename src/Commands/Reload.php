@@ -48,5 +48,7 @@ class Reload extends Command
 
             return true;
         }
+
+        return false;
     }
 }

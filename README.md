@@ -1,4 +1,4 @@
-# Laravel Commands by [SuperHelio](link-author)
+# Laravel Commands by [SuperHelio][link-author]
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
@@ -10,7 +10,7 @@
 This is a collection of Laravel Artisan commands created to help everyone
 in their development work. We try to keep these as useful as possible.
 
-This package requires PHP 7.0 or later. `composer.lock` has been generated with PHP v7.0.23.
+This package requires PHP 7.3 or later. The `composer.lock` file has been generated with PHP v7.4.13.
 
 ## Install
 
@@ -27,7 +27,7 @@ You'll only want to use these generators for local development, so you don't wan
 ```php
 public function register()
 {
-    if ($this->app->environment() == 'local') {
+    if ($this->app->environment() === 'local') {
         $this->app->register('SuperHelio\Commands\ServiceProvider');
     }
 }

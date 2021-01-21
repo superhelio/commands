@@ -5,6 +5,7 @@ namespace Superhelio\Commands\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class Gozer extends Command
 {
@@ -134,14 +135,12 @@ class Gozer extends Command
     {
         try {
             /** @var \Doctrine\DBAL\Schema\AbstractSchemaManager $connection */
-            $connection = app('db')->connection()->getDoctrineSchemaManager();
+            return app('db')->connection()->getDoctrineSchemaManager();
         } catch (\Exception $e) {
             $this->error($e->getMessage());
 
             return false;
         }
-
-        return $connection;
     }
 
     /**
@@ -165,7 +164,7 @@ class Gozer extends Command
 
     public function getDatabasePrefix()
     {
-        return trim(DB::getTablePrefix());
+        return trim(DB::connection()->getTablePrefix());
     }
 
     /**
@@ -179,7 +178,7 @@ class Gozer extends Command
     }
 
     /**
-     * @param array $tables
+     * @param array|\Illuminate\Support\Collection $tables
      *
      * @return \Illuminate\Support\Collection
      */
@@ -188,7 +187,7 @@ class Gozer extends Command
         $prefix = $this->dbPrefix;
 
         return collect($tables)->reject(function ($table) use ($prefix) {
-            return !starts_with($table, $prefix);
+            return !Str::startsWith($table, $prefix);
         });
     }
 }
