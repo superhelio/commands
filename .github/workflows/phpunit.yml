@@ -6,15 +6,40 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        php_version:
+          - 7.4
+          - 8.0 
+          - 8.1
+          - 8.2
+          - 8.3
+          - latest
+
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: php-actions/composer@v5
-
-      - name: PHPUnit Tests
-        uses: php-actions/phpunit@v2
+      - uses: shivammathur/setup-php@v2
         with:
-          php_extensions: xdebug mbstring
-          bootstrap: vendor/autoload.php
-          configuration: phpunit.xml
-          args: --coverage-text
+          php-version: ${{ matrix.php_version }}
+          tools: composer, phpunit
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-${{ matrix.php_version }}-${{ hashFiles('**/composer.json') }}
+
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Configure matchers
+        uses: mheap/phpunit-matcher-action@v1
+
+      - name: Run tests
+        run: composer test-ci
+ 

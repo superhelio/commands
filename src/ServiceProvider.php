@@ -5,9 +5,8 @@ namespace Superhelio\Commands;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 /**
- * Class PackageServiceProvider
+ * Class PackageServiceProvider.
  *
- * @package Superhelio\Commands
  * @see http://laravel.com/docs/master/packages#service-providers
  * @see http://laravel.com/docs/master/providers
  */
@@ -17,6 +16,7 @@ class ServiceProvider extends BaseServiceProvider
      * Indicates if loading of the provider is deferred.
      *
      * @see http://laravel.com/docs/master/providers#deferred-providers
+     *
      * @var bool
      */
     protected $defer = false;
@@ -25,7 +25,6 @@ class ServiceProvider extends BaseServiceProvider
      * Register the service provider.
      *
      * @see http://laravel.com/docs/master/providers#the-register-method
-     * @return void
      */
     public function register()
     {

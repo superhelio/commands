@@ -33,7 +33,7 @@ class Reload extends Command
                 [
                     '--no-interaction' => true,
                     '--env' => 'development',
-                    '--verbose' => 3
+                    '--verbose' => 3,
                 ]
             );
             $this->call(
@@ -42,7 +42,7 @@ class Reload extends Command
                     '--seed' => true,
                     '--no-interaction' => true,
                     '--env' => 'development',
-                    '--verbose' => 3
+                    '--verbose' => 3,
                 ]
             );
 
