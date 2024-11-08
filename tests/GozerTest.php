@@ -7,6 +7,10 @@ use Superhelio\Commands\Commands\Gozer;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class GozerTest extends \Orchestra\Testbench\TestCase
 {
     /**
@@ -22,8 +26,6 @@ class GozerTest extends \Orchestra\Testbench\TestCase
      * Define environment setup.
      *
      * @param \Illuminate\Foundation\Application $app
-     *
-     * @return void
      */
     protected function getEnvironmentSetUp($app)
     {
@@ -51,16 +53,16 @@ class GozerTest extends \Orchestra\Testbench\TestCase
     {
         return [
             \Superhelio\Commands\Tests\Stubs\ServiceProvider::class,
-            \Superhelio\Commands\ServiceProvider::class
+            \Superhelio\Commands\ServiceProvider::class,
         ];
     }
 
-    public function test_database_is_there_and_functions()
+    public function testDatabaseIsThereAndFunctions()
     {
         DB::table('users')->insert([
             'name' => 'User name',
             'email' => 'hello@gozer.dev',
-            'password' => bcrypt('123')
+            'password' => bcrypt('123'),
         ]);
 
         $users = DB::table('users')->where('id', '=', 1)->first();
@@ -69,17 +71,17 @@ class GozerTest extends \Orchestra\Testbench\TestCase
         self::assertTrue(Hash::check('123', $users->password));
     }
 
-    public function test_dbal_is_installed()
+    public function testDbalIsInstalled()
     {
         self::assertTrue(class_exists('\\Doctrine\\DBAL\\Schema\\Schema'));
     }
 
-    public function test_gozer_is_installed()
+    public function testGozerIsInstalled()
     {
         self::assertTrue(class_exists('\\Superhelio\\Commands\\Commands\\Gozer'));
     }
 
-    public function test_gozer_has_required_methods_and_properties()
+    public function testGozerHasRequiredMethodsAndProperties()
     {
         $gozer = new ReflectionClass('\\Superhelio\\Commands\\Commands\\Gozer');
         self::assertTrue($gozer->hasMethod('handle'));
@@ -88,14 +90,14 @@ class GozerTest extends \Orchestra\Testbench\TestCase
         self::assertTrue($gozer->hasProperty('dbPrefix'));
     }
 
-    public function test_gozer_finds_database_prefix()
+    public function testGozerFindsDatabasePrefix()
     {
         $gozer = new Gozer();
 
         self::assertEquals('gozerTest__', $gozer->getDatabasePrefix());
     }
 
-    public function test_gozer_finds_users_table()
+    public function testGozerFindsUsersTable()
     {
         $gozer = new Gozer();
 
@@ -110,15 +112,15 @@ class GozerTest extends \Orchestra\Testbench\TestCase
         self::assertContains('gozerTest__users', $filteredTables->toArray());
     }
 
-    public function test_gozer_table_filtering_works()
+    public function testGozerTableFilteringWorks()
     {
         $gozer = new Gozer();
-        $tables = array(
+        $tables = [
             'gozerTest__users',
             'gozerTest__migrations',
             'this_should_be_filtered',
-            'filter_me_too'
-        );
+            'filter_me_too',
+        ];
 
         $gozer->setDatabasePrefix('gozerTest__');
         $filtered = $gozer->getFilteredTables($tables);

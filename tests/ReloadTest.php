@@ -2,10 +2,10 @@
 
 namespace Superhelio\Commands\Tests;
 
-use Superhelio\Commands\Commands\Reload;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-
+/**
+ * @internal
+ * @coversNothing
+ */
 class ReloadTest extends \Orchestra\Testbench\TestCase
 {
     public function testReloadTest()
@@ -13,12 +13,12 @@ class ReloadTest extends \Orchestra\Testbench\TestCase
         self::assertTrue(true);
     }
 
-    public function test_reload_is_installed()
+    public function testReloadIsInstalled()
     {
         self::assertTrue(class_exists('\\Superhelio\\Commands\\Commands\\Reload'));
     }
 
-    public function test_reload_has_required_methods_and_properties()
+    public function testReloadHasRequiredMethodsAndProperties()
     {
         $reload = new \ReflectionClass('\\Superhelio\\Commands\\Commands\\Reload');
         self::assertTrue($reload->hasMethod('handle'));

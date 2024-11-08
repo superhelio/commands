@@ -76,16 +76,14 @@ class Gozer extends Command
              */
             $tables = $this->getFilteredTables($tables);
 
-            /**
-             * Check that we got at least one table, bail out if not
-             */
+            // Check that we got at least one table, bail out if not
             if ($tables->count() < 1) {
                 $this->info('There are no tables, only Zuul.');
 
                 return true;
             }
 
-            /**
+            /*
              * Bid your farewells to these tables.
              * Last look and confirmation.
              */
@@ -95,27 +93,22 @@ class Gozer extends Command
             ));
             $this->line('');
 
-            /**
-             * Last confirmation before dropping tables
-             */
+            // Last confirmation before dropping tables
             if ($this->confirm('Really delete those tables?')) {
-
                 /** Fancy pants progress bar to see your tables get destroyed */
                 $bar = $this->output->createProgressBar($tables->count());
 
                 Schema::disableForeignKeyConstraints();
                 $tables->each(function ($table) use ($bar, $connection) {
-
-                    /** Drop the table */
+                    // Drop the table
                     $connection->dropTable($table);
 
-                    /** Advance our progress bar */
+                    // Advance our progress bar
                     $bar->advance();
-
                 });
                 Schema::enableForeignKeyConstraints();
 
-                /** Progress bar is now finished */
+                // Progress bar is now finished
                 $bar->finish();
             }
 
@@ -134,7 +127,7 @@ class Gozer extends Command
     public function getConnection()
     {
         try {
-            /** @var \Doctrine\DBAL\Schema\AbstractSchemaManager $connection */
+            // @var \Doctrine\DBAL\Schema\AbstractSchemaManager $connection
             return app('db')->connection()->getDoctrineSchemaManager();
         } catch (\Exception $e) {
             $this->error($e->getMessage());
@@ -144,8 +137,6 @@ class Gozer extends Command
     }
 
     /**
-     * @param \Doctrine\DBAL\Schema\AbstractSchemaManager $connection
-     *
      * @return array|bool
      */
     public function getTables(\Doctrine\DBAL\Schema\AbstractSchemaManager $connection)
@@ -168,7 +159,7 @@ class Gozer extends Command
     }
 
     /**
-     * This is mainly for testing purposes
+     * This is mainly for testing purposes.
      *
      * @param string $prefix
      */
